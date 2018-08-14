@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AdventureWorksCosmos.UI.Infrastructure
+namespace AdventureWorksCosmos.Core
 {
     public interface IDocumentMessageHandler<in T>
         where T : IDocumentMessage

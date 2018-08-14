@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AdventureWorksCosmos.Core.Infrastructure;
+using AdventureWorksCosmos.Core.Models.Orders;
 using AdventureWorksCosmos.Products.Models;
-using AdventureWorksCosmos.UI.Models.Orders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,13 +39,13 @@ namespace AdventureWorksCosmos.UI
             var request = new OrderRequest
             {
                 Id = Guid.NewGuid(),
-                Customer = new Models.Orders.Customer
+                Customer = new Core.Models.Orders.Customer
                 {
                     FirstName = "Jane",
                     MiddleName = "Mary",
                     LastName = "Doe"
                 },
-                Items = cart.Items.Select(li => new Models.Orders.LineItem
+                Items = cart.Items.Select(li => new Core.Models.Orders.LineItem
                 {
                     ProductId = li.Key,
                     Quantity = li.Value.Quantity,

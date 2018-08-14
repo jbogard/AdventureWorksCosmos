@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AdventureWorksCosmos.UI.Models.Orders;
+using AdventureWorksCosmos.Core.Infrastructure;
+using AdventureWorksCosmos.Core.Models.Orders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

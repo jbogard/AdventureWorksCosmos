@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace AdventureWorksCosmos.UI.Models.Orders
+namespace AdventureWorksCosmos.Core.Models.Orders
 {
     public class ApproveOrderRequest : IRequest
     {

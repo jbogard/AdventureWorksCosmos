@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AdventureWorksCosmos.UI.Infrastructure
+namespace AdventureWorksCosmos.Core.Infrastructure
 {
     public interface IUnitOfWork
     {

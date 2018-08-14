@@ -1,7 +1,6 @@
-﻿using AdventureWorksCosmos.UI.Infrastructure;
-using AdventureWorksCosmos.UI.Models.Orders;
+﻿using AdventureWorksCosmos.Core.Models.Orders;
 
-namespace AdventureWorksCosmos.UI.Models.Inventory
+namespace AdventureWorksCosmos.Core.Models.Inventory
 {
     public class Stock : DocumentBase
     {

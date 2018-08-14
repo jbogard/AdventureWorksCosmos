@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdventureWorksCosmos.UI.Infrastructure
+namespace AdventureWorksCosmos.Core
 {
     public interface IDocumentMessage
     {

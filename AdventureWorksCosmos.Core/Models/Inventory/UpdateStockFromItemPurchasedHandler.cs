@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AdventureWorksCosmos.UI.Infrastructure;
-using AdventureWorksCosmos.UI.Models.Orders;
+using AdventureWorksCosmos.Core.Infrastructure;
+using AdventureWorksCosmos.Core.Models.Orders;
 
-namespace AdventureWorksCosmos.UI.Models.Inventory
+namespace AdventureWorksCosmos.Core.Models.Inventory
 {
     public class UpdateStockFromItemPurchasedHandler : IDocumentMessageHandler<ItemPurchased>
     {

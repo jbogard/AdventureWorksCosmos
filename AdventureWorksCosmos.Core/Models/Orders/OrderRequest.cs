@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AdventureWorksCosmos.UI.Infrastructure;
+using AdventureWorksCosmos.Core.Infrastructure;
 
-namespace AdventureWorksCosmos.UI.Models.Orders
+namespace AdventureWorksCosmos.Core.Models.Orders
 {
     public enum Status
     {

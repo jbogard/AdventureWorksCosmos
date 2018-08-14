@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AdventureWorksCosmos.UI.Models.Inventory;
-using AdventureWorksCosmos.UI.Models.Orders;
+using AdventureWorksCosmos.Core.Models.Orders;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

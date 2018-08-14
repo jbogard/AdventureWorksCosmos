@@ -1,8 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AdventureWorksCosmos.Core.Infrastructure;
 using MediatR;
 
-namespace AdventureWorksCosmos.UI.Models.Orders
+namespace AdventureWorksCosmos.Core.Models.Orders
 {
     public class ApproveOrderHandler : IRequestHandler<ApproveOrderRequest>
     {

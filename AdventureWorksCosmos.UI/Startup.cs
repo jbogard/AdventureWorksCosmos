@@ -1,8 +1,7 @@
 using System;
+using AdventureWorksCosmos.Core;
+using AdventureWorksCosmos.Core.Infrastructure;
 using AdventureWorksCosmos.Products.Models;
-using AdventureWorksCosmos.UI.Infrastructure;
-using AdventureWorksCosmos.UI.Models.Inventory;
-using AdventureWorksCosmos.UI.Models.Orders;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +26,7 @@ namespace AdventureWorksCosmos.UI
 
             services.AddDistributedMemoryCache();
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(Startup), typeof(IDocumentMessage));
 
             services.AddScoped(typeof(IDocumentDBRepository<>), typeof(DocumentDBRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -35,7 +34,7 @@ namespace AdventureWorksCosmos.UI
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
             services.Scan(c =>
             {
-                c.FromAssembliesOf(typeof(Startup))
+                c.FromAssembliesOf(typeof(IDocumentMessage))
                     .AddClasses(t => t.AssignableTo(typeof(IDocumentMessageHandler<>)))
                     .AsImplementedInterfaces()
                     .WithTransientLifetime();

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 
-namespace AdventureWorksCosmos.UI.Infrastructure
+namespace AdventureWorksCosmos.Core.Infrastructure
 {
     public class UnitOfWorkBehavior<TRequest, TResponse> 
         : IPipelineBehavior<TRequest, TResponse>

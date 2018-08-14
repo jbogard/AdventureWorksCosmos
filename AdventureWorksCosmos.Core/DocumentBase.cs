@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using AdventureWorksCosmos.Core.Infrastructure;
 using Newtonsoft.Json;
 
-namespace AdventureWorksCosmos.UI.Infrastructure
+namespace AdventureWorksCosmos.Core
 {
     public abstract class DocumentBase
     {

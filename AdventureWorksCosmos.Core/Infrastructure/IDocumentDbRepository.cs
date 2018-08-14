@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AdventureWorksCosmos.UI.Infrastructure;
 using Microsoft.Azure.Documents;
 
-namespace AdventureWorksCosmos.UI
+namespace AdventureWorksCosmos.Core.Infrastructure
 {
     public interface IDocumentDBRepository<T> where T : DocumentBase
     {

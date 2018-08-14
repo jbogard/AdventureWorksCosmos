@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AdventureWorksCosmos.UI.Infrastructure;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Newtonsoft.Json;
 
-namespace AdventureWorksCosmos.UI
+namespace AdventureWorksCosmos.Core.Infrastructure
 {
     public class DocumentDBRepository<T> : IDocumentDBRepository<T> where T : DocumentBase
     {
@@ -61,10 +60,9 @@ namespace AdventureWorksCosmos.UI
 
         public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
         {
-            IDocumentQuery<T> query = _client.CreateDocumentQuery<T>(
-                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-                new FeedOptions { MaxItemCount = -1 })
-                .Where(predicate)
+            IDocumentQuery<T> query = Queryable.Where(_client.CreateDocumentQuery<T>(
+                    UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
+                    new FeedOptions { MaxItemCount = -1 }), predicate)
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();

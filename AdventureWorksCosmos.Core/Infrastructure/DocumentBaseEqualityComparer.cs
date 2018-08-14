@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AdventureWorksCosmos.UI.Infrastructure
+namespace AdventureWorksCosmos.Core.Infrastructure
 {
     public class DocumentBaseEqualityComparer : IEqualityComparer<DocumentBase>
     {
