@@ -17,10 +17,13 @@ namespace AdventureWorksCosmos.Core.Commands
             DocumentType = documentType;
         }
 
-        public static ProcessDocumentMessages New<TDocument>(TDocument document)
+        public static ProcessDocumentMessages New<TDocument>(
+            TDocument document)
             where TDocument : DocumentBase
         {
-            return new ProcessDocumentMessages(document.Id, document.GetType().AssemblyQualifiedName);
+            return new ProcessDocumentMessages(
+                document.Id, 
+                document.GetType().AssemblyQualifiedName);
         }
     }
 }

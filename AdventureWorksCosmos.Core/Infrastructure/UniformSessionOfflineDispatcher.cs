@@ -4,14 +4,15 @@ using NServiceBus.UniformSession;
 
 namespace AdventureWorksCosmos.Core.Infrastructure
 {
-    public class UniformSessionOfflineDispatcher : IOfflineDispatcher
+    public class UniformSessionOfflineDispatcher 
+        : IOfflineDispatcher
     {
         private readonly IUniformSession _uniformSession;
 
         public UniformSessionOfflineDispatcher(IUniformSession uniformSession)
             => _uniformSession = uniformSession;
 
-        public Task DispatchOffline(DocumentBase document)
-            => _uniformSession.Send(ProcessDocumentMessages.New(document));
+        public async Task DispatchOffline(DocumentBase document)
+            => await _uniformSession.Send(ProcessDocumentMessages.New(document));
     }
 }

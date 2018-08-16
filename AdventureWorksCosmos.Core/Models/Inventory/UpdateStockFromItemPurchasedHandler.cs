@@ -15,25 +15,27 @@ namespace AdventureWorksCosmos.Core.Models.Inventory
 
         public async Task Handle(ItemPurchased message)
         {
-            var stock = (await _repository
-                .GetItemsAsync(s => s.ProductId == message.ProductId))
-                .FirstOrDefault();
+            await Task.CompletedTask;
+            throw new Exception("Blammo");
+            //var stock = (await _repository
+            //    .GetItemsAsync(s => s.ProductId == message.ProductId))
+            //    .FirstOrDefault();
 
-            if (stock == null)
-            {
-                stock = new Stock
-                {
-                    Id = Guid.NewGuid(),
-                    ProductId = message.ProductId,
-                    QuantityAvailable = 100
-                };
+            //if (stock == null)
+            //{
+            //    stock = new Stock
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        ProductId = message.ProductId,
+            //        QuantityAvailable = 100
+            //    };
 
-                await _repository.CreateItemAsync(stock);
-            }
+            //    await _repository.CreateItemAsync(stock);
+            //}
 
-            stock.Handle(message);
+            //stock.Handle(message);
 
-            await _repository.UpdateItemAsync(stock);
+            //await _repository.UpdateItemAsync(stock);
         }
     }
 }
