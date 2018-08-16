@@ -82,7 +82,16 @@ namespace AdventureWorksCosmos.Core.Infrastructure
 
         public async Task<Document> UpdateItemAsync(T item)
         {
-            return await _client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(DatabaseId, CollectionId, item.Id.ToString()), item);
+            var ac = new AccessCondition
+            {
+                Condition = item.ETag,
+                Type = AccessConditionType.IfMatch
+            };
+
+            return await _client.ReplaceDocumentAsync(
+                UriFactory.CreateDocumentUri(DatabaseId, CollectionId, item.Id.ToString()), 
+                item,
+                new RequestOptions { AccessCondition = ac });
         }
 
         public async Task DeleteItemAsync(Guid id)

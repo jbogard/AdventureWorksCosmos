@@ -13,7 +13,12 @@
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.0.0-preview2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
+    <PackageReference Include="NServiceBus" Version="7.0.1" />
+    <PackageReference Include="NServiceBus.RabbitMQ" Version="5.0.0" />
+    <PackageReference Include="NServiceBus.StructureMap" Version="7.0.0" />
+    <PackageReference Include="NServiceBus.UniformSession" Version="2.1.0" />
     <PackageReference Include="Scrutor" Version="2.2.2" />
+    <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="1.4.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />

@@ -10,6 +10,9 @@ namespace AdventureWorksCosmos.Core
         [JsonProperty(PropertyName = "id")]
         public Guid Id { get; set; }
 
+        [JsonProperty(PropertyName = "_etag")]
+        public string ETag { get; set; }
+
         private HashSet<IDocumentMessage> _outbox 
             = new HashSet<IDocumentMessage>(DocumentMessageEqualityComparer.Instance);
         private HashSet<IDocumentMessage> _inbox

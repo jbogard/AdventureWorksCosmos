@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AdventureWorksCosmos.Core.Commands;
 using MediatR;
 
 namespace AdventureWorksCosmos.Core.Infrastructure
@@ -35,6 +36,29 @@ namespace AdventureWorksCosmos.Core.Infrastructure
                 }
             }
             return null;
+        }
+
+        public async Task Dispatch(ProcessDocumentMessages command)
+        {
+            var documentType = Type.GetType(command.DocumentType);
+            var repository = GetRepository(documentType);
+            var document = await repository.FindById(command.DocumentId);
+
+            if (document == null)
+            {
+                return;
+            }
+
+            foreach (var message in document.Outbox.ToArray())
+            {
+                var handler = GetHandler(message);
+
+                await handler.Handle(message, _serviceFactory);
+
+                document.ProcessDocumentMessage(message);
+
+                await repository.Update(document);
+            }
         }
 
         private static DomainEventDispatcherHandler GetHandler(

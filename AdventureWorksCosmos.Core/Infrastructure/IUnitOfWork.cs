@@ -10,5 +10,6 @@ namespace AdventureWorksCosmos.Core.Infrastructure
         void Register(DocumentBase document);
         void Register(IEnumerable<DocumentBase> aggregates);
         Task Complete();
+        void Reset();
     }
 }
