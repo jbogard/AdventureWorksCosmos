@@ -25,5 +25,13 @@ namespace AdventureWorksCosmos.Core.Commands
                 document.Id, 
                 document.GetType().AssemblyQualifiedName);
         }
+        public static ProcessDocumentMessages New<TDocument>(
+            dynamic document)
+            where TDocument : DocumentBase
+        {
+            return new ProcessDocumentMessages(
+                Guid.Parse(document.Id), 
+                typeof(TDocument).AssemblyQualifiedName);
+        }
     }
 }

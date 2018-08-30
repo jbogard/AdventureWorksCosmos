@@ -14,19 +14,14 @@ namespace AdventureWorksCosmos.Core.Infrastructure
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly string Endpoint = "https://localhost:8081/";
-        private readonly string Key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
         private readonly string DatabaseId = typeof(T).Name;
         private readonly string CollectionId = "Items";
         private readonly DocumentClient _client;
 
-        public DocumentDBRepository(IUnitOfWork unitOfWork)
+        public DocumentDBRepository(IUnitOfWork unitOfWork, DocumentClient client)
         {
             _unitOfWork = unitOfWork;
-            _client = new DocumentClient(new Uri(Endpoint), Key, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto
-            });
+            _client = client;
             CreateDatabaseIfNotExistsAsync().Wait();
             CreateCollectionIfNotExistsAsync().Wait();
         }
@@ -60,9 +55,9 @@ namespace AdventureWorksCosmos.Core.Infrastructure
 
         public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
         {
-            IDocumentQuery<T> query = Queryable.Where(_client.CreateDocumentQuery<T>(
+            IDocumentQuery<T> query = _client.CreateDocumentQuery<T>(
                     UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-                    new FeedOptions { MaxItemCount = -1 }), predicate)
+                    new FeedOptions { MaxItemCount = -1 }).Where(predicate)
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();

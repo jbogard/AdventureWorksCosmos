@@ -5,8 +5,10 @@ using AdventureWorksCosmos.Products.Models;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using NServiceBus;
 using NServiceBus.UniformSession;
 using StructureMap;
@@ -15,6 +17,9 @@ namespace AdventureWorksCosmos.UI
 {
     public class Startup
     {
+        private const string CosmosUrl = "https://localhost:8081/";
+        private const string CosmosKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,6 +36,11 @@ namespace AdventureWorksCosmos.UI
 
             services.AddDistributedMemoryCache();
 
+            var client = new DocumentClient(new Uri(CosmosUrl), CosmosKey, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+
             var container = new Container(cfg =>
             {
                 cfg.Scan(scanner =>
@@ -46,6 +56,7 @@ namespace AdventureWorksCosmos.UI
                 cfg.For<IDocumentMessageDispatcher>().Use<DocumentMessageDispatcher>();
                 cfg.For<IOfflineDispatcher>().Use<UniformSessionOfflineDispatcher>();
                 cfg.For<IMessageSession>().Singleton().Use(() => Endpoint);
+                cfg.For<DocumentClient>().Use(client);
             });
 
             var endpointConfiguration = new EndpointConfiguration("AdventureWorksCosmos.UI");
