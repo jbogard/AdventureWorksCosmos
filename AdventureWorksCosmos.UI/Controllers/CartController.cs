@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AdventureWorksCosmos.Core.Infrastructure;
+using AdventureWorksCosmos.Core.Models.Cart;
 using AdventureWorksCosmos.Core.Models.Orders;
 using AdventureWorksCosmos.Products.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,11 +15,13 @@ namespace AdventureWorksCosmos.UI
     {
         private readonly AdventureWorks2016Context _db;
         private readonly IDocumentDBRepository<OrderRequest> _docDbRepository;
+        private readonly IMediator _mediator;
 
-        public CartController(AdventureWorks2016Context db, IDocumentDBRepository<OrderRequest> docDbRepository)
+        public CartController(AdventureWorks2016Context db, IDocumentDBRepository<OrderRequest> docDbRepository, IMediator mediator)
         {
             _db = db;
             _docDbRepository = docDbRepository;
+            _mediator = mediator;
         }
 
         public async Task<IActionResult> AddItem(int id)
@@ -36,32 +40,13 @@ namespace AdventureWorksCosmos.UI
         {
             var cart = GetCart();
 
-            var request = new OrderRequest
-            {
-                Id = Guid.NewGuid(),
-                Customer = new Core.Models.Orders.Customer
-                {
-                    FirstName = "Jane",
-                    MiddleName = "Mary",
-                    LastName = "Doe"
-                },
-                Items = cart.Items.Select(li => new Core.Models.Orders.LineItem
-                {
-                    ProductId = li.Key,
-                    Quantity = li.Value.Quantity,
-                    ListPrice = li.Value.ListPrice,
-                    ProductName = li.Value.ProductName
-                }).ToList(),
-                Status = Status.New
-            };
+            var request = new Checkout.Request {Cart = cart};
 
-            var doc = await _docDbRepository.CreateItemAsync(request);
-
-            cart.Items.Clear();
+            var response = await _mediator.Send(request);
 
             HttpContext.Session.Set("Cart", cart);
 
-            return RedirectToPage("/Orders/Show", new {id = doc.Id});
+            return RedirectToPage("/Orders/Show", new {id = response.OrderId});
         }
 
         private ShoppingCart GetCart() 

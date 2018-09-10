@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AdventureWorksCosmos.Core.Models.Cart;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AdventureWorksCosmos.UI.ViewComponents
 {

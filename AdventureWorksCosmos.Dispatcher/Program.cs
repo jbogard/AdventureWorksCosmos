@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AdventureWorksCosmos.Core;
 using AdventureWorksCosmos.Core.Infrastructure;
+using AdventureWorksCosmos.Core.Models.Fulfillments;
+using AdventureWorksCosmos.Core.Models.Inventory;
 using AdventureWorksCosmos.Core.Models.Orders;
 using MediatR;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.ChangeFeedProcessor;
 using Microsoft.Azure.Documents.ChangeFeedProcessor.DataAccess;
+using Microsoft.Azure.Documents.ChangeFeedProcessor.PartitionManagement;
 using Microsoft.Azure.Documents.Client;
 using Newtonsoft.Json;
 using NServiceBus;
@@ -66,10 +72,28 @@ namespace AdventureWorksCosmos.Dispatcher
             Endpoint = await NServiceBus.Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
 
-            var builder = CreateBuilder<OrderRequest>(client);
-            var processor = await builder.BuildAsync();
+            var builders = new[]
+            {
+                CreateBuilder<OrderRequest>(client),
+                CreateBuilder<OrderFulfillment>(client),
+                CreateBuilder<Stock>(client),
+            };
 
-            await processor.StartAsync();
+            var databases = new[] {nameof(OrderRequest), nameof(OrderFulfillment), nameof(Stock)};
+            foreach (var databaseId in databases)
+            {
+                await CreateDatabaseIfNotExistsAsync(client, databaseId);
+                await CreateCollectionIfNotExistsAsync(client, databaseId, "Items");
+                await CreateCollectionIfNotExistsAsync(client, databaseId, "Leases");
+            }
+
+            var processors = new List<IChangeFeedProcessor>();
+            foreach (var builder in builders)
+            {
+                var processor = await builder.BuildAsync();
+                await processor.StartAsync();
+                processors.Add(processor);
+            }
 
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
@@ -77,7 +101,10 @@ namespace AdventureWorksCosmos.Dispatcher
             await Endpoint.Stop()
                 .ConfigureAwait(false);
 
-            await processor.StopAsync();
+            foreach (var processor in processors)
+            {
+                await processor.StopAsync();
+            }
         }
 
         private static ChangeFeedProcessorBuilder CreateBuilder<T>(DocumentClient client) 
@@ -113,5 +140,47 @@ namespace AdventureWorksCosmos.Dispatcher
 
             return builder;
         }
+
+        private static async Task CreateDatabaseIfNotExistsAsync(DocumentClient client, string databaseId)
+        {
+            try
+            {
+                await client.ReadDatabaseAsync(UriFactory.CreateDatabaseUri(databaseId));
+            }
+            catch (DocumentClientException e)
+            {
+                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    await client.CreateDatabaseAsync(new Database { Id = databaseId });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private static async Task CreateCollectionIfNotExistsAsync(DocumentClient client, string databaseId, string collectionId)
+        {
+            try
+            {
+                await client.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(databaseId, collectionId));
+            }
+            catch (DocumentClientException e)
+            {
+                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    await client.CreateDocumentCollectionAsync(
+                        UriFactory.CreateDatabaseUri(databaseId),
+                        new DocumentCollection { Id = collectionId },
+                        new RequestOptions { OfferThroughput = 1000 });
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
     }
 }

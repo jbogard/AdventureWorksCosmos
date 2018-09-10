@@ -13,4 +13,8 @@
     <PackageReference Include="NServiceBus.UniformSession" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AdventureWorksCosmos.Products\AdventureWorksCosmos.Products.csproj" />
+  </ItemGroup>
+
 </Project>

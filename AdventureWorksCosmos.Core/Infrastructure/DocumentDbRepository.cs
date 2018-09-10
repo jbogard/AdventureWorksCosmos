@@ -72,6 +72,8 @@ namespace AdventureWorksCosmos.Core.Infrastructure
 
         public async Task<Document> CreateItemAsync(T item)
         {
+            _unitOfWork.Register(item);
+
             return await _client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
         }
 

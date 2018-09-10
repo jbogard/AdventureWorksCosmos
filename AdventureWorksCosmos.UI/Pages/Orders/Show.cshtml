@@ -14,8 +14,11 @@
 <p>@Html.DisplayFor(m => m.Order.Customer.LastName)</p>
 
 
-@if (Model.Order.Status != Status.Approved)
+@if (Model.Order.Status == Status.New)
 {
+    <form asp-controller="Order" asp-action="Reject" asp-route-id="@Model.Order.Id" method="post">
+        <input type="submit" value="Reject"/>
+    </form>
     <form asp-controller="Order" asp-action="Approve" asp-route-id="@Model.Order.Id" method="post">
         <input type="submit" value="Approve"/>
     </form>

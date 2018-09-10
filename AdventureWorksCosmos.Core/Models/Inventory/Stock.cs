@@ -1,4 +1,4 @@
-﻿using AdventureWorksCosmos.Core.Models.Orders;
+﻿using System;
 
 namespace AdventureWorksCosmos.Core.Models.Inventory
 {
@@ -8,12 +8,33 @@ namespace AdventureWorksCosmos.Core.Models.Inventory
 
         public int ProductId { get; set; }
 
-        public void Handle(ItemPurchased message)
+        public void Handle(StockRequest message)
         {
             Process(message, e =>
             {
-                QuantityAvailable -= e.Quantity;
+                if (QuantityAvailable >= message.AmountRequested)
+                {
+                    QuantityAvailable -= e.AmountRequested;
+                    Send(new StockRequestConfirmed
+                    {
+                        Id = Guid.NewGuid(),
+                        OrderFulfillmentId = e.OrderFulfillmentId,
+                        ProductId = ProductId
+                    });
+                }
+                else
+                {
+                    Send(new StockRequestDenied
+                    {
+                        Id = Guid.NewGuid(),
+                        OrderFulfillmentId = e.OrderFulfillmentId,
+                        ProductId = ProductId
+                    });
+                }
             });
         }
+
+        public void Handle(StockReturnRequested message) 
+            => Process(message, e => QuantityAvailable += e.AmountToReturn);
     }
 }

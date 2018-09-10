@@ -2,18 +2,17 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AdventureWorksCosmos.Core.Infrastructure;
-using AdventureWorksCosmos.Core.Models.Orders;
 
 namespace AdventureWorksCosmos.Core.Models.Inventory
 {
-    public class UpdateStockFromItemPurchasedHandler : IDocumentMessageHandler<ItemPurchased>
+    public class StockRequestHandler : IDocumentMessageHandler<StockRequest>
     {
         private readonly IDocumentDBRepository<Stock> _repository;
 
-        public UpdateStockFromItemPurchasedHandler(IDocumentDBRepository<Stock> repository) 
+        public StockRequestHandler(IDocumentDBRepository<Stock> repository) 
             => _repository = repository;
 
-        public async Task Handle(ItemPurchased message)
+        public async Task Handle(StockRequest message)
         {
             var stock = (await _repository
                 .GetItemsAsync(s => s.ProductId == message.ProductId))

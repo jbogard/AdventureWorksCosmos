@@ -1,10 +1,10 @@
 ﻿using System;
-using MediatR;
 
 namespace AdventureWorksCosmos.Core.Models.Orders
 {
-    public class ApproveOrderRequest : IRequest
+    public class OrderRejected : IDocumentMessage
     {
         public Guid Id { get; set; }
+        public Guid OrderId { get; set; }
     }
 }

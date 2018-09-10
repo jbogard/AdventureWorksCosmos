@@ -63,7 +63,15 @@ namespace AdventureWorksCosmos.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Approve(Guid id)
         {
-            await _mediator.Send(new ApproveOrderRequest { Id = id });
+            await _mediator.Send(new ApproveOrder.Request { Id = id });
+
+            return RedirectToPage("/Orders/Show", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reject(Guid id)
+        {
+            await _mediator.Send(new RejectOrder.Request { Id = id });
 
             return RedirectToPage("/Orders/Show", new { id });
         }
