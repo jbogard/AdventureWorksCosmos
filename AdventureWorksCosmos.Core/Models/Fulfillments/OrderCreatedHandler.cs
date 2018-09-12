@@ -6,11 +6,11 @@ using AdventureWorksCosmos.Core.Models.Orders;
 
 namespace AdventureWorksCosmos.Core.Models.Fulfillments
 {
-    public class CreateFulfillmentFromOrderCreatedHandler : IDocumentMessageHandler<OrderCreated>
+    public class OrderCreatedHandler : IDocumentMessageHandler<OrderCreated>
     {
         private readonly IDocumentDBRepository<OrderFulfillment> _repository;
 
-        public CreateFulfillmentFromOrderCreatedHandler(IDocumentDBRepository<OrderFulfillment> repository) 
+        public OrderCreatedHandler(IDocumentDBRepository<OrderFulfillment> repository) 
             => _repository = repository;
 
         public async Task Handle(OrderCreated message)

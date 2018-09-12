@@ -55,10 +55,16 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
         {
             Process(message, m =>
             {
-                if (IsCancelled)
-                    return;
-
                 OrderApproved = true;
+
+                if (IsCancelled)
+                {
+                    ProcessCancellation();
+                }
+                else
+                {
+                    CheckForSuccess();
+                }
             });
         }
 
@@ -69,19 +75,13 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
                 var lineItem = LineItems.Single(li => li.ProductId == m.ProductId);
                 lineItem.StockConfirmed = true;
 
-                if (IsCancelled && !lineItem.StockReturnRequested)
+                if (IsCancelled)
                 {
                     ReturnStock(lineItem);
-                    return;
                 }
-
-                if (LineItems.All(li => li.StockConfirmed))
+                else
                 {
-                    Send(new OrderFulfillmentSuccessful
-                    {
-                        Id = Guid.NewGuid(),
-                        OrderId = OrderId
-                    });
+                    CheckForSuccess();
                 }
             });
         }
@@ -104,10 +104,30 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
             });
         }
 
+        private void CheckForSuccess()
+        {
+            if (IsCancelled)
+                return;
+
+            if (LineItems.All(li => li.StockConfirmed) && OrderApproved)
+            {
+                Send(new OrderFulfillmentSuccessful
+                {
+                    Id = Guid.NewGuid(),
+                    OrderId = OrderId
+                });
+            }
+        }
+
         private void Cancel()
         {
             IsCancelled = true;
 
+            ProcessCancellation();
+        }
+
+        private void ProcessCancellation()
+        {
             if (!CancelOrderRequested && !OrderRejected)
             {
                 CancelOrderRequested = true;
@@ -123,7 +143,6 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
                 ReturnStock(lineItem);
             }
         }
-
 
         private void ReturnStock(LineItem lineItem)
         {

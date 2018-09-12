@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AdventureWorksCosmos.Core.Models.Cart;
+using AdventureWorksCosmos.Core.Models.Fulfillments;
 
 namespace AdventureWorksCosmos.Core.Models.Orders
 {
@@ -11,7 +12,8 @@ namespace AdventureWorksCosmos.Core.Models.Orders
         Submitted = 1,
         Approved = 2,
         Rejected = 3,
-        Cancelled = 4
+        Cancelled = 4,
+        Completed = 5
     }
 
     public class OrderRequest : DocumentBase
@@ -85,6 +87,9 @@ namespace AdventureWorksCosmos.Core.Models.Orders
             if (Status == Status.Approved)
                 throw new InvalidOperationException("Cannot reject an approved order.");
 
+            if (Status == Status.Approved)
+                throw new InvalidOperationException("Cannot reject a completed order.");
+
             Status = Status.Rejected;
             Send(new OrderRejected
             {
@@ -101,6 +106,17 @@ namespace AdventureWorksCosmos.Core.Models.Orders
                     return;
 
                 Status = Status.Cancelled;
+            });
+        }
+
+        public void Handle(OrderFulfillmentSuccessful message)
+        {
+            Process(message, m =>
+            {
+                if (Status == Status.Rejected || Status == Status.Cancelled)
+                    return;
+
+                Status = Status.Completed;
             });
         }
     }
