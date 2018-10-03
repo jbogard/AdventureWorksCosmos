@@ -63,13 +63,13 @@ namespace AdventureWorksCosmos.Core.Models.Orders
 
         public Customer Customer { get; set; }
 
-        public void Approve()
+        public CommandResult Approve()
         {
             if (Status == Status.Approved)
-                return;
+                return CommandResult.Success;
 
             if (Status == Status.Rejected)
-                throw new InvalidOperationException("Cannot approve a rejected order.");
+                return CommandResult.Fail("Cannot approve a rejected order.");
 
             Status = Status.Approved;
             Send(new OrderApproved
@@ -77,6 +77,8 @@ namespace AdventureWorksCosmos.Core.Models.Orders
                 Id = Guid.NewGuid(),
                 OrderId = Id
             });
+
+            return CommandResult.Success;
         }
 
         public void Reject()

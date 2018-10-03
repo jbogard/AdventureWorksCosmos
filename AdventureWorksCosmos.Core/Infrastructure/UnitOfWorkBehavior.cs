@@ -9,10 +9,8 @@ namespace AdventureWorksCosmos.Core.Infrastructure
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public UnitOfWorkBehavior(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public UnitOfWorkBehavior(IUnitOfWork unitOfWork) 
+            => _unitOfWork = unitOfWork;
 
         public async Task<TResponse> Handle(
             TRequest request, 

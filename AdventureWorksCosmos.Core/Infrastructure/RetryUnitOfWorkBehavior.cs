@@ -14,9 +14,7 @@ namespace AdventureWorksCosmos.Core.Infrastructure
         public RetryUnitOfWorkBehavior(IUnitOfWork unitOfWork) 
             => _unitOfWork = unitOfWork;
 
-        public Task<TResponse> Handle(
-            TRequest request, 
-            CancellationToken cancellationToken,
+        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
             var retryCount = 0;
