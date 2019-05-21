@@ -35,7 +35,7 @@
         public new static CommandResult<T> Fail(string reason)
             => new CommandResult<T>(reason);
 
-        public static CommandResult<T> Success(T payload)
+        public new static CommandResult<T> Success(T payload)
             => new CommandResult<T>(payload);
 
         public static implicit operator bool(CommandResult<T> result)

@@ -16,6 +16,8 @@ namespace AdventureWorksCosmos.Core.Models.Orders
             var order = await _repository.GetItemAsync(message.OrderId);
 
             order.Handle(message);
+
+            await _repository.UpdateItemAsync(order);
         }
     }
 }

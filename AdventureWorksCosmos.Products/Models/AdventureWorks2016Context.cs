@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Newtonsoft.Json;
 
 namespace AdventureWorksCosmos.Products.Models
 {
@@ -75,6 +77,7 @@ namespace AdventureWorksCosmos.Products.Models
         public virtual DbSet<Vendor> Vendor { get; set; }
         public virtual DbSet<WorkOrder> WorkOrder { get; set; }
         public virtual DbSet<WorkOrderRouting> WorkOrderRouting { get; set; }
+        public virtual DbSet<OutboxMessage> Outbox { get; set; }
 
         // Unable to generate entity type for table 'Production.ProductDocument'. Please see the warning messages.
         // Unable to generate entity type for table 'Production.Document'. Please see the warning messages.
@@ -87,8 +90,27 @@ namespace AdventureWorksCosmos.Products.Models
             }
         }
 
+        public Task SaveMessageAsync<T>(T message)
+        {
+            var outboxMessage = new OutboxMessage
+            {
+                Id = Guid.NewGuid(),
+                Type = typeof(T).FullName,
+                Body = JsonConvert.SerializeObject(message)
+            };
+            return Outbox.AddAsync(outboxMessage);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<OutboxMessage>(entity =>
+            {
+                entity.ToTable("Outbox");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Type);
+                entity.Property(e => e.Body);
+                entity.Property(e => e.DispatchedAt);
+            });
             modelBuilder.Entity<Address>(entity =>
             {
                 entity.ToTable("Address", "Person");
