@@ -25,7 +25,7 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
         
         public void Handle(OrderCreated message)
         {
-            Process(message, m =>
+            Receive(message, m =>
             {
                 if (IsCancelled)
                     return;
@@ -53,7 +53,7 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
 
         public void Handle(OrderApproved message)
         {
-            Process(message, m =>
+            Receive(message, m =>
             {
                 OrderApproved = true;
 
@@ -70,7 +70,7 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
 
         public void Handle(StockRequestConfirmed message)
         {
-            Process(message, m =>
+            Receive(message, m =>
             {
                 var lineItem = LineItems.Single(li => li.ProductId == m.ProductId);
                 lineItem.StockConfirmed = true;
@@ -88,7 +88,7 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
 
         public void Handle(StockRequestDenied message)
         {
-            Process(message, m =>
+            Receive(message, m =>
             {
                 Cancel();
             });
@@ -96,7 +96,7 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
 
         public void Handle(OrderRejected message)
         {
-            Process(message, m =>
+            Receive(message, m =>
             {
                 OrderRejected = true;
 

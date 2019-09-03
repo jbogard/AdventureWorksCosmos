@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AdventureWorksCosmos.Core.Infrastructure;
 using AdventureWorksCosmos.Core.Models.Cart;
-using AdventureWorksCosmos.Core.Models.Orders;
 using AdventureWorksCosmos.Products.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +12,11 @@ namespace AdventureWorksCosmos.UI
     public class CartController : Controller
     {
         private readonly AdventureWorks2016Context _db;
-        private readonly IDocumentDBRepository<OrderRequest> _docDbRepository;
         private readonly IMediator _mediator;
 
-        public CartController(AdventureWorks2016Context db, IDocumentDBRepository<OrderRequest> docDbRepository, IMediator mediator)
+        public CartController(AdventureWorks2016Context db, IMediator mediator)
         {
             _db = db;
-            _docDbRepository = docDbRepository;
             _mediator = mediator;
         }
 

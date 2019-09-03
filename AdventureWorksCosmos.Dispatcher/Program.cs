@@ -50,7 +50,7 @@ namespace AdventureWorksCosmos.Dispatcher
                 cfg.For<ServiceFactory>().Use<ServiceFactory>(ctx => ctx.GetInstance);
 
                 cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(UnitOfWorkBehavior<,>));
-                cfg.For(typeof(IDocumentDBRepository<>)).Use(typeof(DocumentDBRepository<>));
+                cfg.For(typeof(IDocumentDbRepository<>)).Use(typeof(DocumentDBRepository<>));
                 cfg.For<IUnitOfWork>().Use<UnitOfWork>();
                 cfg.For<DocumentClient>().Use(client);
                 cfg.For<IDocumentMessageDispatcher>().Use<DocumentMessageDispatcher>();
@@ -132,7 +132,7 @@ namespace AdventureWorksCosmos.Dispatcher
                 })
                 .WithProcessorOptions(new ChangeFeedProcessorOptions
                 {
-                    FeedPollDelay = TimeSpan.FromSeconds(15),
+                    FeedPollDelay = TimeSpan.FromSeconds(60),
                 })
                 .WithFeedDocumentClient(dbClient)
                 .WithLeaseDocumentClient(dbClient)

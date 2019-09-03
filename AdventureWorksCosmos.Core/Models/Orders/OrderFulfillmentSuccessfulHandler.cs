@@ -6,9 +6,9 @@ namespace AdventureWorksCosmos.Core.Models.Orders
 {
     public class OrderFulfillmentSuccessfulHandler : IDocumentMessageHandler<OrderFulfillmentSuccessful>
     {
-        private readonly IDocumentDBRepository<OrderRequest> _repository;
+        private readonly IDocumentDbRepository<OrderRequest> _repository;
 
-        public OrderFulfillmentSuccessfulHandler(IDocumentDBRepository<OrderRequest> repository)
+        public OrderFulfillmentSuccessfulHandler(IDocumentDbRepository<OrderRequest> repository)
             => _repository = repository;
 
         public async Task Handle(OrderFulfillmentSuccessful message)

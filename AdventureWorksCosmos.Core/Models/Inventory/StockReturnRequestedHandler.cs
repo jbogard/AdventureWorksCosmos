@@ -7,9 +7,9 @@ namespace AdventureWorksCosmos.Core.Models.Inventory
 {
     public class StockReturnRequestedHandler : IDocumentMessageHandler<StockReturnRequested>
     {
-        private readonly IDocumentDBRepository<Stock> _repository;
+        private readonly IDocumentDbRepository<Stock> _repository;
 
-        public StockReturnRequestedHandler(IDocumentDBRepository<Stock> repository)
+        public StockReturnRequestedHandler(IDocumentDbRepository<Stock> repository)
             => _repository = repository;
 
         public async Task Handle(StockReturnRequested message)

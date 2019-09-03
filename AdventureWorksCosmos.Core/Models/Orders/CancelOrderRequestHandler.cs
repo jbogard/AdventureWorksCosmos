@@ -5,9 +5,9 @@ namespace AdventureWorksCosmos.Core.Models.Orders
 {
     public class CancelOrderRequestHandler : IDocumentMessageHandler<CancelOrderRequest>
     {
-        private readonly IDocumentDBRepository<OrderRequest> _repository;
+        private readonly IDocumentDbRepository<OrderRequest> _repository;
 
-        public CancelOrderRequestHandler(IDocumentDBRepository<OrderRequest> repository) 
+        public CancelOrderRequestHandler(IDocumentDbRepository<OrderRequest> repository) 
             => _repository = repository;
 
         public async Task Handle(CancelOrderRequest message)
@@ -15,6 +15,8 @@ namespace AdventureWorksCosmos.Core.Models.Orders
             var order = await _repository.GetItemAsync(message.OrderId);
 
             order.Handle(message);
+
+            await _repository.UpdateItemAsync(order);
         }
     }
 }

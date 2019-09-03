@@ -51,7 +51,7 @@ namespace AdventureWorksCosmos.UI
 
                 cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(UnitOfWorkBehavior<,>));
                 cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(RetryUnitOfWorkBehavior<,>));
-                cfg.For(typeof(IDocumentDBRepository<>)).Use(typeof(DocumentDBRepository<>));
+                cfg.For(typeof(IDocumentDbRepository<>)).Use(typeof(DocumentDBRepository<>));
                 cfg.For<IUnitOfWork>().Use<UnitOfWork>();
                 cfg.For<IDocumentMessageDispatcher>().Use<DocumentMessageDispatcher>();
                 cfg.For<IOfflineDispatcher>().Use<UniformSessionOfflineDispatcher>();

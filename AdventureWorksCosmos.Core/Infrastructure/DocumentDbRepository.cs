@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace AdventureWorksCosmos.Core.Infrastructure
 {
-    public class DocumentDBRepository<T> : IDocumentDBRepository<T> where T : DocumentBase
+    public class DocumentDBRepository<T> : IDocumentDbRepository<T> where T : DocumentBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -74,7 +74,11 @@ namespace AdventureWorksCosmos.Core.Infrastructure
         {
             _unitOfWork.Register(item);
 
-            return await _client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
+            var response = await _client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId), item);
+
+            item.ETag = response.Resource.ETag;
+
+            return response;
         }
 
         public async Task<Document> UpdateItemAsync(T item)
@@ -85,10 +89,14 @@ namespace AdventureWorksCosmos.Core.Infrastructure
                 Type = AccessConditionType.IfMatch
             };
 
-            return await _client.ReplaceDocumentAsync(
+            var response = await _client.ReplaceDocumentAsync(
                 UriFactory.CreateDocumentUri(DatabaseId, CollectionId, item.Id.ToString()), 
                 item,
                 new RequestOptions { AccessCondition = ac });
+
+            item.ETag = response.Resource.ETag;
+
+            return response;
         }
 
         public async Task DeleteItemAsync(Guid id)

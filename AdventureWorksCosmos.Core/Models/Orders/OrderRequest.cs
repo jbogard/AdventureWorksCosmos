@@ -102,7 +102,7 @@ namespace AdventureWorksCosmos.Core.Models.Orders
 
         public void Handle(CancelOrderRequest message)
         {
-            Process(message, m =>
+            Receive(message, m =>
             {
                 if (Status == Status.Rejected)
                     return;
@@ -113,7 +113,7 @@ namespace AdventureWorksCosmos.Core.Models.Orders
 
         public void Handle(OrderFulfillmentSuccessful message)
         {
-            Process(message, m =>
+            Receive(message, m =>
             {
                 if (Status == Status.Rejected || Status == Status.Cancelled)
                     return;

@@ -6,12 +6,14 @@ using Microsoft.Azure.Documents;
 
 namespace AdventureWorksCosmos.Core.Infrastructure
 {
-    public interface IDocumentDBRepository<T> where T : DocumentBase
+    public interface IDocumentDbRepository<T> 
+        where T : DocumentBase
     {
         Task<Document> CreateItemAsync(T item);
         Task DeleteItemAsync(Guid id);
         Task<T> GetItemAsync(Guid id);
-        Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetItemsAsync(
+            Expression<Func<T, bool>> predicate);
         Task<Document> UpdateItemAsync(T item);
     }
 }

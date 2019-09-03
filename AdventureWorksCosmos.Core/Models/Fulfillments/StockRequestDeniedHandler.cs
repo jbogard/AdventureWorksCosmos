@@ -6,9 +6,9 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
 {
     public class StockRequestDeniedHandler : IDocumentMessageHandler<StockRequestDenied>
     {
-        private readonly IDocumentDBRepository<OrderFulfillment> _repository;
+        private readonly IDocumentDbRepository<OrderFulfillment> _repository;
 
-        public StockRequestDeniedHandler(IDocumentDBRepository<OrderFulfillment> repository)
+        public StockRequestDeniedHandler(IDocumentDbRepository<OrderFulfillment> repository)
             => _repository = repository;
 
         public async Task Handle(StockRequestDenied message)

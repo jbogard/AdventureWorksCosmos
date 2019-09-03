@@ -26,7 +26,7 @@ namespace AdventureWorksCosmos.Core.Infrastructure
 
                     await handler.Handle(documentMessage, _serviceFactory);
 
-                    document.ProcessDocumentMessage(documentMessage);
+                    document.Complete(documentMessage);
 
                     await repository.Update(document);
                 }
@@ -55,7 +55,7 @@ namespace AdventureWorksCosmos.Core.Infrastructure
 
                 await handler.Handle(message, _serviceFactory);
 
-                document.ProcessDocumentMessage(message);
+                document.Complete(message);
 
                 await repository.Update(document);
             }
@@ -74,7 +74,7 @@ namespace AdventureWorksCosmos.Core.Infrastructure
         private DocumentDbRepo GetRepository(Type aggregateType)
         {
             var repoBaseType = typeof(DocumentDbRepo<>).MakeGenericType(aggregateType);
-            var repoType = typeof(IDocumentDBRepository<>).MakeGenericType(aggregateType);
+            var repoType = typeof(IDocumentDbRepository<>).MakeGenericType(aggregateType);
             var repoInstance = _serviceFactory(repoType);
 
             return (DocumentDbRepo)Activator.CreateInstance(repoBaseType, repoInstance);
@@ -89,9 +89,9 @@ namespace AdventureWorksCosmos.Core.Infrastructure
         private class DocumentDbRepo<T> : DocumentDbRepo
             where T : DocumentBase
         {
-            private readonly IDocumentDBRepository<T> _repository;
+            private readonly IDocumentDbRepository<T> _repository;
 
-            public DocumentDbRepo(IDocumentDBRepository<T> repository)
+            public DocumentDbRepo(IDocumentDbRepository<T> repository)
             {
                 _repository = repository;
             }

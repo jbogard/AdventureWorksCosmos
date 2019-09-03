@@ -37,27 +37,19 @@ namespace AdventureWorksCosmos.Core.Infrastructure
             }
         }
 
-        public T Find<T>(Guid id) where T : DocumentBase
-        {
-            return _identityMap.OfType<T>().FirstOrDefault(ab => ab.Id == id);
-        }
+        public T Find<T>(Guid id) where T : DocumentBase => 
+            _identityMap
+                .OfType<T>()
+                .FirstOrDefault(ab => ab.Id == id);
 
         public async Task Complete()
         {
             var toSkip = new HashSet<DocumentBase>(DocumentBaseEqualityComparer.Instance);
 
-            while (_identityMap
-                    .Except(toSkip, DocumentBaseEqualityComparer.Instance)
-                .Any(a => a.Outbox.Any()))
+            while (TryGetDocumentWithOutboxMessages(toSkip, out var document))
             {
-                var document = _identityMap
-                    .Except(toSkip, DocumentBaseEqualityComparer.Instance)
-                    .FirstOrDefault(a => a.Outbox.Any());
-
-                if (document == null)
-                    continue;
-
                 var ex = await _dispatcher.Dispatch(document);
+
                 if (ex != null)
                 {
                     toSkip.Add(document);
@@ -65,6 +57,16 @@ namespace AdventureWorksCosmos.Core.Infrastructure
                     await _offlineDispatcher.DispatchOffline(document);
                 }
             }
+        }
+
+        private bool TryGetDocumentWithOutboxMessages(
+            HashSet<DocumentBase> toSkip, 
+            out DocumentBase document)
+        {
+            document = _identityMap
+                .Except(toSkip, DocumentBaseEqualityComparer.Instance)
+                .FirstOrDefault(a => a.Outbox.Any());
+            return document != null;
         }
 
         public void Reset()

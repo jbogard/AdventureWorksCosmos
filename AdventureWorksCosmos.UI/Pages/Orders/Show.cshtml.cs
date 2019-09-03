@@ -11,9 +11,9 @@ namespace AdventureWorksCosmos.UI.Pages.Orders
 {
     public class ShowModel : PageModel
     {
-        private readonly IDocumentDBRepository<OrderRequest> _db;
+        private readonly IDocumentDbRepository<OrderRequest> _db;
 
-        public ShowModel(IDocumentDBRepository<OrderRequest> db) => _db = db;
+        public ShowModel(IDocumentDbRepository<OrderRequest> db) => _db = db;
 
         public async Task OnGet(Guid id)
         {

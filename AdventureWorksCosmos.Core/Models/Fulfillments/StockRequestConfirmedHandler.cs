@@ -7,9 +7,9 @@ namespace AdventureWorksCosmos.Core.Models.Fulfillments
 {
     public class StockRequestConfirmedHandler : IDocumentMessageHandler<StockRequestConfirmed>
     {
-        private readonly IDocumentDBRepository<OrderFulfillment> _repository;
+        private readonly IDocumentDbRepository<OrderFulfillment> _repository;
 
-        public StockRequestConfirmedHandler(IDocumentDBRepository<OrderFulfillment> repository) 
+        public StockRequestConfirmedHandler(IDocumentDbRepository<OrderFulfillment> repository) 
             => _repository = repository;
 
         public async Task Handle(StockRequestConfirmed message)

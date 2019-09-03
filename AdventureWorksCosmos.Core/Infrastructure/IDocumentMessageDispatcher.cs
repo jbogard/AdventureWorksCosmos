@@ -6,7 +6,10 @@ namespace AdventureWorksCosmos.Core.Infrastructure
 {
     public interface IDocumentMessageDispatcher
     {
-        Task<Exception> Dispatch(DocumentBase document);
+        Task<Exception> Dispatch(
+            DocumentBase document);
+
+
         Task Dispatch(ProcessDocumentMessages command);
     }
 }

@@ -10,7 +10,7 @@ namespace AdventureWorksCosmos.Core.Models.Inventory
 
         public void Handle(StockRequest message)
         {
-            Process(message, e =>
+            Receive(message, e =>
             {
                 if (QuantityAvailable >= message.AmountRequested)
                 {
@@ -35,6 +35,6 @@ namespace AdventureWorksCosmos.Core.Models.Inventory
         }
 
         public void Handle(StockReturnRequested message) 
-            => Process(message, e => QuantityAvailable += e.AmountToReturn);
+            => Receive(message, e => QuantityAvailable += e.AmountToReturn);
     }
 }

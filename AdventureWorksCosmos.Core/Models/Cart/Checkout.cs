@@ -21,9 +21,9 @@ namespace AdventureWorksCosmos.Core.Models.Cart
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly IDocumentDBRepository<OrderRequest> _repository;
+            private readonly IDocumentDbRepository<OrderRequest> _repository;
 
-            public Handler(IDocumentDBRepository<OrderRequest> repository) 
+            public Handler(IDocumentDbRepository<OrderRequest> repository) 
                 => _repository = repository;
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)

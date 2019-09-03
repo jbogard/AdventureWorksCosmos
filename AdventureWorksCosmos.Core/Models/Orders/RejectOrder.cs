@@ -15,9 +15,9 @@ namespace AdventureWorksCosmos.Core.Models.Orders
 
         public class Handler : IRequestHandler<Request>
         {
-            private readonly IDocumentDBRepository<OrderRequest> _orderRepository;
+            private readonly IDocumentDbRepository<OrderRequest> _orderRepository;
 
-            public Handler(IDocumentDBRepository<OrderRequest> orderRepository)
+            public Handler(IDocumentDbRepository<OrderRequest> orderRepository)
             {
                 _orderRepository = orderRepository;
             }
